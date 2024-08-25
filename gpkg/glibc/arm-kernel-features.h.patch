@@ -1,0 +1,12 @@
+--- glibc-2.39/sysdeps/unix/sysv/linux/arm/kernel-features.h	2024-01-31 03:34:58.000000000 +0300
++++ glibc-2.39/sysdeps/unix/sysv/linux/arm/kernel-features.h.patch	2024-08-25 19:40:23.260028950 +0300
+@@ -38,9 +38,6 @@
+    non-standard name.  */
+ #define __NR_fadvise64_64 __NR_arm_fadvise64_64
+ 
+-#define __ASSUME_RECV_SYSCALL   1
+-#define __ASSUME_SEND_SYSCALL	1
+-
+ /* Support for the mlock2 and copy_file_range syscalls was added to
+    the compat syscall table for 64-bit kernels in 4.7, although
+    present in 32-bit kernels from 4.4 and 4.5 respectively.  */

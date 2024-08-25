@@ -67,7 +67,6 @@ termux_step_pre_configure() {
 	# }
 	# == Rules ===
 	# - The name syscall and the name of the function fakesyscall must not be repeated
-	# - When specifying changes in the fakesyscall function, you should not use spaces
 	# - Specify the syscall name without the leading `__NR_` prefix
 	# ============
 	for i in aarch64 arm i386 x86_64/64; do
@@ -82,16 +81,21 @@ termux_step_pre_configure() {
 		} >> $header_disabled_syscall
 		{
 			echo -e "\n#define DISABLED_SYSCALL_WITH_FAKESYSCALL \\"
+			local IFS=$'\n'
 			for j in $(jq -r '. | keys | .[]' ${TERMUX_PKG_BUILDER_DIR}/fakesyscall.json); do
+				local need_return=false
 				for z in $(jq -r '."'${j}'" | .[]' ${TERMUX_PKG_BUILDER_DIR}/fakesyscall.json); do
 					if grep -q "^#define __NR_${z} " $header_disabled_syscall; then
 						echo -e "\tcase __NR_${z}: \\"
+						need_return=true
 					elif [[ ${z} =~ ^[0-9]+$ ]]; then
 						echo -e "\tcase ${z}: \\"
+						need_return=true
 					fi
 				done
-				echo -e "\t\treturn ${j}; \\"
+				[ "${need_return}" = "true" ] && echo -e "\t\treturn ${j}; \\"
 			done
+			unset IFS
 		} >> $header_disabled_syscall
 		sed -i '$ s| \\||' $header_disabled_syscall
 	done

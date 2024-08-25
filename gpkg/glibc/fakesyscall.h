@@ -3,14 +3,35 @@
 
 #include <arch-syscall.h>
 #include <disabled-syscall.h>
+#include <fcntl.h>
+
+// close_range
+// fchownat
+// ftruncate
+// getpgrp
+// unlinkat
+// symlinkat
 #include <unistd.h>
 
-long int return_zero() {
-	return 0;
-}
+// accept4
+// recvfrom
+// sendto
+#include <sys/socket.h>
 
-long int return_ENOSYS() {
-	return INLINE_SYSCALL_ERROR_RETURN_VALUE(ENOSYS);
-}
+// fchmodat
+// statx
+#include <sys/stat.h>
+
+// __clock_gettime64
+#include <time.h>
+
+// epoll_pwait2
+#include <sys/epoll.h>
+
+// shmat
+// shmctl
+// shmdt
+// shmget
+#include <sys/shm.h>
 
 #endif //_FAKE_SYSCALL
